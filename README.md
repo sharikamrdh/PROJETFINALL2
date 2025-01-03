@@ -42,7 +42,8 @@ Le jeu commence avec le personnage principal qui se réveille dans un hôpital p
 2) Écrire la commande "python3 app.py" sur le terminal de VSCode
 3) Écrire la commande "npm run dev" sur le terminal de VSCode
 4) Cliquez sur l'url du [serveur local](http://127.0.0.1:5173)
-5) Commencer à jouer le jeu
+5) Commencer à jouer le jeu!
+   ![Texte alternatif](./assets/1.jpg)
 
 
 
