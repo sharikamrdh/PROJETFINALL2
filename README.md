@@ -32,3 +32,8 @@ Le jeu commence avec le personnage principal qui se réveille dans un hôpital p
 - pip install flask-wtf
 - pip install flask-session
 - sudo apt-get install libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev libsdl2-ttf-dev
+
+- ou directement installer les bibliothèques par pip3 install -r requirements.txt
+
+
+
