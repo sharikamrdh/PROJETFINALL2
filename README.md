@@ -35,7 +35,7 @@ Le jeu commence avec le personnage principal qui se réveille dans un hôpital p
 
 - OU installer directement toutes les bibliothèques par "pip3 install -r requirements.txt"
 
-- Pour installer toutes les dépendances à partir de package.json : "npm install"
+- ET Pour installer toutes les dépendances à partir de package.json : "npm install"
 
 ## Lancement du Jeu psychologique 2D
 1) Installer [Ollama](https://ollama.com/) et lancer Ollama
