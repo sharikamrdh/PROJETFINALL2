@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jeu Psychologique</title>
+    <!-- Lien vers la librairie Phaser (CDN) -->
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="game-container"></div>
+    <div id="container3D"></div>
+    
+    <!-- Guide du Jeu -->
+    <div id="gameGuide" class="guide-overlay">
+        <div class="guide-content">
+            <span id="closeGuide" class="close-button">&times;</span>
+            <h2>Guide du Jeu</h2>
+            <p>Bienvenue dans <strong>The Hollow Reflection</strong> ! Voici comment jouer :</p>
+            <ul>
+                <li>
+                    <strong>Explorer :</strong>
+                    <img src="assets/devin-hipp-gramma-bedroom 2.jpg" alt="Explorer" class="guide-icon">
+                    Cliquez et déplacez-vous dans les différentes scènes pour découvrir les secrets de la maison.
+                </li>
+                <li>
+                    <strong>Inventaire :</strong>
+                    <img src="assets/inventaire.png" alt="Inventaire" class="guide-icon">
+                    Collectez des objets (Clé, Note, Pistolet) en cliquant dessus. Ils apparaîtront dans votre inventaire.
+                </li>
+                <li>
+                    <strong>Interactions :</strong>
+                    <img src="assets/key-removebg-preview.png" alt="Interactions" class="guide-icon">
+                    Utilisez les objets de votre inventaire en les faisant glisser vers les zones interactives.
+                </li>
+                <li>
+                    <strong>Santé Mentale :</strong>
+                    <img src="assets/mental-health-icon.png" alt="Santé Mentale" class="guide-icon">
+                    Surveillez votre barre de santé mentale. Une santé mentale basse déclenche des effets spéciaux et sonores.
+                </li>
+                <li>
+                    <strong>Dialogues :</strong>
+                    <img src="assets/dialogues-icon.png" alt="Dialogues" class="guide-icon">
+                    Suivez les dialogues et faites des choix en appuyant sur les touches A, B ou C pour influencer l'histoire.
+                </li>
+            </ul>
+            <p>Bonne chance, et souvenez-vous : chaque choix a ses conséquences...</p>
+        </div>
+    </div>
+
+    <!-- Icône Persistante pour Retour au Menu Principal -->
+    <img id="homeIcon" src="assets/home.png" alt="Home" class="persistent-icon">
+
+    <!-- Charge ton fichier principal en tant que module ES -->
+    <script type="module" src="main.js"></script>
+</body>
+</html>

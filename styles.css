@@ -1,0 +1,183 @@
+/* --- Styles Globaux --- */
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Empêche le défilement */
+}
+
+#game-container {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+}
+
+canvas {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+.dom-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2; /* Plus élevé que le canvas pour que les éléments DOM soient au-dessus */
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* Empêche les éléments de bloquer les événements du jeu */
+}
+
+.dom-container > div {
+    pointer-events: auto; /* Réactive les événements pour les éléments enfants */
+}
+
+input,
+button {
+    font-size: 24px;
+    padding: 10px;
+}
+
+/* --- Styles pour le Guide du Jeu --- */
+.guide-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+    z-index: 10000; /* Assurez-vous que le guide est au-dessus de tout */
+}
+
+.guide-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.guide-content {
+    background: #2c2c2c;
+    color: #ffffff;
+    padding: 30px;
+    border-radius: 10px;
+    width: 80%;
+    max-width: 600px;
+    position: relative;
+    animation: slideIn 0.5s forwards, pulse 5s infinite;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.guide-content h2 {
+    margin-top: 0;
+    text-align: center;
+    font-family: 'Arial', sans-serif;
+    color: #f0a500;
+}
+
+.guide-content p, .guide-content ul {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+}
+
+.guide-content ul {
+    list-style-type: disc;
+    margin-left: 20px;
+}
+
+.close-button {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 28px;
+    cursor: pointer;
+    color: #f0a500;
+    transition: transform 0.3s ease;
+}
+
+.close-button:hover {
+    transform: scale(1.2);
+}
+
+/* Animations */
+@keyframes slideIn {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.guide-icon {
+    width: 50px; /* Augmenté de 30px à 50px */
+    height: 50px; /* Augmenté de 30px à 50px */
+    margin-left: 10px;
+    vertical-align: middle;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease; /* Transition fluide pour la transformation, l'ombre et l'opacité */
+}
+
+.guide-icon:hover {
+    transform: scale(1.2) rotate(2deg); /* Augmenté de scale(1.1) à scale(1.2) */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Ajusté l'ombre pour correspondre à la taille */
+    opacity: 0.8;
+    cursor: pointer; /* Changer le curseur pour indiquer l'interactivité */
+}
+
+@media (max-width: 600px) {
+    .guide-content {
+        width: 90%;
+        padding: 20px;
+    }
+    
+    .guide-content h2 {
+        font-size: 24px;
+    }
+    
+    .guide-content p, .guide-content ul {
+        font-size: 14px;
+    }
+    
+    .guide-icon {
+        width: 40px; /* Taille réduite pour les petits écrans */
+        height: 40px;
+    }
+    
+    .guide-icon:hover {
+        transform: scale(1.2) rotate(2deg);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        opacity: 0.8;
+    }
+}
+
+/* --- Styles pour l'Icône Persistante --- */
+/* Home Icon */
+.persistent-icon {
+    position: fixed;
+    bottom: 20px; /* Distance depuis le bas */
+    right: 20px; /* Distance depuis la droite */
+    width: 60px; /* Taille de l'icône */
+    height: 60px;
+    z-index: 10001; /* Assurez-vous que l'icône est au-dessus de tout */
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.persistent-icon:hover {
+    transform: scale(1.2); /* Agrandissement à 120% */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Ombre portée */
+}
