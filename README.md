@@ -39,10 +39,12 @@ Le jeu commence avec le personnage principal qui se réveille dans un hôpital p
 
 ## Lancement du Jeu psychologique 2D
 1) Installer [Ollama](https://ollama.com/) et lancer Ollama
-2) Écrire la commande "python3 app.py" sur le terminal de VSCode
-3) Écrire la commande "npm run dev" sur le terminal de VSCode
-4) Cliquez sur l'url du [serveur local](http://127.0.0.1:5173)
-5) Commencer à jouer le jeu!
+2) Écrire dans le terminal "ollama create Modelfile -f Modelfile/Modelfile"
+3) Vérifier que le model a bien été crée: "ollama run Modelfile"
+4) Écrire la commande "python3 app.py" sur le terminal de VSCode
+5) Écrire la commande "npm run dev" sur le terminal de VSCode
+6) Cliquez sur l'url du [serveur local](http://127.0.0.1:5173)
+7) Commencer à jouer le jeu!
    ![Texte alternatif](./assets/1.jpg)
 
 
