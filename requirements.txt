@@ -1,7 +1,10 @@
-Flask
+flask
+flask-cors
 requests
-flask_cors
+pillow
 opencv-python
-numpy
 scikit-learn
-python-dotenv
+pygame
+
+#Pour installer toutes les dépendances à partir de package.json : npm install
+
