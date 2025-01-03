@@ -33,9 +33,9 @@ Le jeu commence avec le personnage principal qui se réveille dans un hôpital p
 - pip install flask-session
 - sudo apt-get install libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev libsdl2-ttf-dev
 
-- OU installer directement toutes les bibliothèques par "pip3 install -r requirements.txt"
+- _OU installer directement toutes les bibliothèques par "pip3 install -r requirements.txt"_
 
-- ET Pour installer toutes les dépendances à partir de package.json : "npm install"
+- _ET Pour installer toutes les dépendances à partir de package.json : "npm install"_
 
 ## Lancement du Jeu psychologique 2D
 1) Installer [Ollama](https://ollama.com/) et lancer Ollama
