@@ -143,6 +143,11 @@ class MainMenu extends Phaser.Scene {
         this.load.audio('Hospital', 'assets/Abandoned Hospital Corridor  Lights, Wind, EKG Machine  15 Minutes of Ambience.mp3');
         this.load.audio('inheritanceSound', 'assets/🔥 FIREPLACE (10 MINUTES) - Relaxing Fire Burning Video & Crackling Fireplace Sounds.mp3');
         this.load.audio('rainSound', 'assets/Rain Sounds for Sleeping 10 Minutes   Rain Ambiance for Relaxing and Study ASMR Nature Sounds ☔️💦💤.mp3');
+        this.load.image('mainMenuBackground', 'assets/jeudhorreuracceuil.jpg');
+        this.load.spritesheet('ghost', 'assets/ghost.gif', {
+            frameWidth: 495, // Ajuste selon la taille réelle de ton gif
+            frameHeight: 452
+        });
         
         // Charger la vidéo d'introduction
         //this.load.video('introVideo', 'assets/intro.mp4');
@@ -150,6 +155,13 @@ class MainMenu extends Phaser.Scene {
 
     create() {
 
+        // Ajouter l'image d'arrière-plan
+        const background = this.add.image(0, 0, 'mainMenuBackground').setOrigin(0, 0);
+        background.setDisplaySize(this.cameras.main.width, this.cameras.main.height); // Ajuster à la taille de l'écran
+        
+        const centerX = this.cameras.main.width / 2;
+        const centerY = this.cameras.main.height / 2;
+        
         // Ajouter un écouteur d'événement pour le bouton de fermeture du guide
         const closeButton = document.getElementById('closeGuide');
         if (closeButton) {
@@ -174,8 +186,6 @@ class MainMenu extends Phaser.Scene {
         });
         
         */
-        const centerX = this.cameras.main.width / 2;
-        const centerY = this.cameras.main.height / 2;
       
         const title = this.add.text(centerX, 100, 'The Hollow Reflection', { fontSize: '32px', fill: '#fff' });
         title.setOrigin(0.5);
