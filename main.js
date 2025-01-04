@@ -2437,7 +2437,7 @@ class HouseScene extends Phaser.Scene {
                 this.cameras.main.fadeIn(500, 0, 0, 0);
     
                 // 2) Dialogue
-                this.showDialogue("Vous êtes maintenant dans le salon...");
+                this.showDialogue("L'air est lourd, saturé de poussière et d'humidité, un mélange de bois pourri et de quelque chose d'indéfinissable, presque métallique. Chaque pas que je fais fait craquer le plancher sous mes pieds, un écho qui résonne bien trop loin, comme si la maison respirait.");
                 // Affichage d'instructions après génération de texte par Ollama
 
                 // Indiquer que le scénario est en cours et non interrompu
@@ -2460,7 +2460,7 @@ class HouseScene extends Phaser.Scene {
                             const centerX = this.cameras.main.width / 2;
                             const centerY = this.cameras.main.height / 2;
 
-                            const instructionText = this.add.text(centerX, centerY - 350, "Appuyer sur A, B ou C pour faire votre choix", {
+                            const instructionText = this.add.text(centerX, centerY - 350, "Appuyer sur la touche A, B ou C pour faire votre choix", {
                                 font: "17px Arial",
                                 fill: "#ffffff",
                                 padding: { x: 10, y: 5 },
