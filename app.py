@@ -14,8 +14,21 @@ import uuid  # Pour générer des noms de fichiers uniques
 from ascii_art import preprocess_image_with_opencv, image_to_ascii, extract_dominant_colors
 from recherche import rechercher_image
 from PIL import Image, ImageDraw, ImageFont  # Importer Pillow
+import logging
+import random
 
 app = Flask(__name__)
+
+# Configuration de base du logging
+logging.basicConfig(
+    level=logging.INFO,  # Niveau de log (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.StreamHandler()  # Affiche les logs dans le terminal
+    ]
+)
+
+logger = logging.getLogger(__name__)
 
 # Configuration des dossiers
 app.config['IMAGES_FOLDER'] = os.path.join(app.root_path, 'images')
@@ -221,9 +234,22 @@ def etat():
 # Événement aléatoire
 @app.route('/evenement', methods=['POST'])
 def evenement():
-    evenement_aleatoire()  # Définie dans regles.py
-    game_state["sante_mentale"] = sante_mentale  # Synchroniser avec l'état du jeu
-    return jsonify({"message": "Un événement aléatoire s'est produit !", "game_state": game_state})
+    try:
+        evenement_type = evenement_aleatoire()  # Définie dans regles.py
+        game_state["sante_mentale"] = sante_mentale  # Synchroniser avec l'état du jeu
+        
+        # Message de log indiquant qu'un événement a été généré
+        logger.info(f"Événement aléatoire généré : Type = '{evenement_type}'")
+        
+        return jsonify({
+            "message": f"Un événement aléatoire de type '{evenement_type}' s'est produit !",
+            "game_state": game_state,
+            "evenement_type": evenement_type  # Inclure le type d'événement
+        }), 200  # Vous pouvez spécifier le code de statut HTTP si nécessaire
+    except Exception as e:
+        logger.error(f"Erreur lors de la génération de l'événement : {e}")
+        return jsonify({"error": "Erreur lors de la génération de l'événement."}), 500
+
 
 # Gérer le temps
 @app.route('/gerer_temps', methods=['POST'])
@@ -247,15 +273,26 @@ def changer_ambiance_route():
     return jsonify({"message": message})
 
 def gerer_temps_et_evenements():
-    global game_state
+    """Gère le temps et déclenche les événements aléatoires"""
+    global game_state, temps_ecoule, temps_event
+    debut = time.time()
+    
     while True:
-        time.sleep(1)
-        game_state["temps_ecoule"] += 1
-        gerer_evenements_temps()  # Définie dans regles.py
-        if game_state["temps_ecoule"] % 10 == 0:
-            evenement_aleatoire()  # Définie dans regles.py
-        changer_ambiance(game_state["luminosite"])  # Définie dans regles.py
-        verifier_position_automatique()
+        time.sleep(1)  # Attendre 1 seconde
+        maintenant = time.time()
+        temps_ecoule += int(maintenant - debut)
+        debut = maintenant
+
+        gerer_evenements_temps()
+
+        # Déclenche un événement aléatoire si le temps écoulé dépasse temps_event
+        if temps_ecoule >= temps_event:
+            evenement_type = evenement_aleatoire()
+            game_state["sante_mentale"] = sante_mentale  # Synchroniser avec l'état du jeu
+            logger.info(f"Événement aléatoire généré : Type = '{evenement_type}'")
+            temps_ecoule = 0
+            temps_event = random.randint(5, 15)  # Nouveau intervalle aléatoire
+            
 
 def verifier_position_automatique():
     global game_state

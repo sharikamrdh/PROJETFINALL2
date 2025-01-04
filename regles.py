@@ -113,7 +113,7 @@ niveau_actuel = 1  # Niveau actuel du joueur
 
 # Variable pour suivre le temps écoulé
 temps_ecoule = 0  # en secondes
-temps_event = 10  # temps en secondes avant de déclencher un événement
+temps_event = 5  # temps en secondes avant de déclencher un événement
 
 # Charger les sons
 effet_bruit_bizarres = pygame.mixer.Sound("assets/oppening_weird.wav")  # Exemple de bruit étrange
@@ -195,15 +195,19 @@ def verifier_etat_jeu():
     else:
         print("Attention, votre santé mentale commence à baisser.")
 
+# Dans regles.py
 def gerer_evenements_temps():
     """Gère les événements de temps"""
-    global sante_mentale, temps_ecoule
+    global sante_mentale, temps_ecoule, temps_event
 
     if temps_ecoule >= temps_event:
         sante_mentale -= 5  # Diminuer la santé mentale
-        print("La folie s'installe... Votre santé mentale diminue ! Santé mentale actuelle : {sante_mentale}")
-        # ou mettre ca jouer_bruit_bizarre()  # Jouer un bruit étrange
-        temps_ecoule = 0  # Réinitialiser le temps écoulé
+        print(f"La folie s'installe... Votre santé mentale diminue ! Santé mentale actuelle : {sante_mentale}")
+        # Ou jouer_bruit_bizarre()  # Jouer un bruit étrange
+        evenement_aleatoire()    # Déclencher un événement aléatoire
+        temps_ecoule = 0          # Réinitialiser le temps écoulé
+        temps_event = random.randint(5, 10)  # Nouveau intervalle aléatoire
+
 
 def evenement_aleatoire():
     """Déclenche un événement aléatoire qui affecte le jeu."""
@@ -213,21 +217,19 @@ def evenement_aleatoire():
     if evenement == "monstre":
         print("Un monstre apparaît soudainement ! Votre santé mentale est perturbée.")
         sante_mentale -= 10
-        scream = pygame.mixer.Sound("assets/scream.wav")  # Bruit de monstre pour l'effet
+        # Les sons sont gérés côté client
 
     elif evenement == "hallucination":
         print("Vous voyez des ombres se mouvoir avec un son de vent. Vous perdez un peu de votre santé mentale.")
         sante_mentale -= 5
-        vent = pygame.mixer.Sound("/home/zaineb/Desktop/L2_PROJECT/vent.wav") 
-        
-
+        # Sons gérés côté client
 
     elif evenement == "choc":
         print("Un bruit des cries soudainement vous effraie !")
-
-        screaming = pygame.mixer.Sound("assets/screaming.wav") 
-
         sante_mentale -= 3
+        # Sons gérés côté client
+
+    return evenement  # Retourner le type d'événement
 
 
 

@@ -5,6 +5,22 @@ pillow
 opencv-python
 scikit-learn
 pygame
+logging
+random
+numpy
+render_template
+jsonify
+send_from_directory
+time
+threading
+flask_cors 
+CORS # Assurez-vous que ce module est correctement défini
+subprocess
+os
+uuid 
+ascii_art 
+recherche
+PIL
 
 #Pour installer toutes les dépendances à partir de package.json : npm install
 

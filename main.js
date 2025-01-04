@@ -1672,6 +1672,12 @@ class HouseScene extends Phaser.Scene {
         super('HouseScene');
         this.isGeneratingText = false; // Indique si le texte est en cours de génération
         this.asciiBackground = null; // Référence à l'arrière-plan ASCII
+        this.houseImage = null; // Référence à l'image de la maison
+
+        // Propriétés pour le changement d'image
+        this.backgroundImages = ['intérieur', 'chambre1', 'chambre2', 'couloir'];
+        this.currentBackgroundIndex = 0;
+        this.backgroundChangeEvent = null;
     }
 
     preload() {
@@ -1680,6 +1686,9 @@ class HouseScene extends Phaser.Scene {
         this.load.image('Houseportail', 'assets/house5portail.png');
         this.load.image('entrée', 'assets/entrée.png');
         this.load.image('intérieur', 'assets/intérieur.png');
+        this.load.image('chambre1', 'assets/chambre1.png');
+        this.load.image('chambre2', 'assets/chambre2.png');
+        this.load.image('couloir', 'assets/couloir.png');
         
         this.load.image('Note', 'assets/letter-removebg.png');
         this.load.image('Pistolet', 'assets/pistolet.png');
@@ -1687,7 +1696,30 @@ class HouseScene extends Phaser.Scene {
 
         // --- Chargement de l'audio si nécessaire ---
         this.load.audio('house', 'assets/Hollow Winter  Snow, Supernatural, Darkness  15 Minutes of Ambience.mp3');
+
+        this.load.audio('scream', 'assets/scream.wav');
+        this.load.audio('screaming', 'assets/screaming.wav');
+
     }
+
+    changeBackgroundImage() {
+        // Incrémenter l'index de l'image
+        this.currentBackgroundIndex = (this.currentBackgroundIndex + 1) % this.backgroundImages.length;
+        const nextImageKey = this.backgroundImages[this.currentBackgroundIndex];
+    
+        // Commencer le fondu noir
+        this.cameras.main.fadeOut(1000, 0, 0, 0);
+    
+        // Après le fondu sortant
+        this.cameras.main.once('camerafadeoutcomplete', () => {
+            // Changer la texture de l'image de la maison
+            this.houseImage.setTexture(nextImageKey);
+    
+            // Commencer le fondu entrant
+            this.cameras.main.fadeIn(1000, 0, 0, 0);
+        });
+    }
+    
 
     async fetchGeneratedText(prompt) {
         try {
@@ -1765,8 +1797,105 @@ class HouseScene extends Phaser.Scene {
             this.load.start();
         });
     }
+
+    // Nouvelle méthode pour déclencher un événement aléatoire
+    async triggerRandomEvent() {
+        try {
+            this.isGeneratingText = true; // Indique que la génération est en cours
+            this.updateContinueButtonVisibility(); // Mettre à jour la visibilité du bouton
+            this.nextButtonBackground.disableInteractive(); // Désactiver le bouton "Next"
+            this.nextButtonText.setAlpha(0.5); // Rendre le bouton "Next" visuellement désactivé
+
+
+            const response = await fetch('http://127.0.0.1:5000/evenement', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({}), // Pas de données nécessaires pour cet appel
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || "Erreur inconnue.");
+            }
+
+            const data = await response.json();
+            const generatedText = data.message || "Un événement s'est produit.";
+            const evenementType = data.evenement_type || null;
+
+            // Jouer le son approprié en fonction de l'événement
+            if (evenementType) {
+                this.playEventSound(evenementType);
+            }
+
+            // Sélectionner aléatoirement une nouvelle image de background
+            const possibleBackgrounds = ['chambre1', 'chambre2', 'couloir'];
+            const randomBackground = Phaser.Utils.Array.GetRandom(possibleBackgrounds);
+            this.houseImage.setTexture(randomBackground);
+
+            // Loguer le message de l'événement dans la console
+            console.log(`Événement aléatoire de type "${evenementType}" : ${generatedText}`);
+        } catch (error) {
+            console.error("Erreur lors du déclenchement de l'événement :", error);
+            // Optionnel : Vous pouvez toujours afficher une alerte ou un message spécifique si nécessaire
+        } finally {
+            this.isGeneratingText = false; // Génération terminée
+            this.updateContinueButtonVisibility(); // Mettre à jour la visibilité du bouton
+            this.nextButtonBackground.setInteractive(); // Réactiver le bouton "Next"
+            this.nextButtonText.setAlpha(1); // Rendre le bouton "Next" visuellement actif
+        }
+    }
+
+
+
+    // Méthode pour jouer le son en fonction du type d'événement avec volume réduit
+    playEventSound(evenementType) {
+        const volumeLevel = 0.1; // Réglez ce niveau selon vos préférences (0.0 à 1.0)
+        switch (evenementType) {
+            case 'monstre':
+                this.sound.play('scream', { volume: volumeLevel }); // Volume réduit pour "monstre"
+                break;
+            case 'hallucination':
+                this.sound.play('screaming', { volume: volumeLevel }); // Volume réduit pour "hallucination"
+                break;
+            case 'choc':
+                this.sound.play('scream', { volume: volumeLevel }); // Volume réduit pour "choc"
+                break;
+            default:
+                console.warn(`Aucun son défini pour l'événement type: ${evenementType}`);
+        }
+    }
+
+
+
     
     create() {
+
+        // Diminuer progressivement le son carSound
+       const carSound = this.sound.get('carSound');
+       if (carSound && carSound.isPlaying) {
+           this.tweens.add({
+               targets: carSound,
+               volume: 0, // Volume final
+               duration: 8000, // Durée de la diminution (2 secondes)
+               ease: 'Power2',
+               onComplete: () => {
+                   carSound.stop(); // Stopper le son une fois le volume à 0
+
+
+                   // Jouer le nouveau son "house"
+                   const houseSound = this.sound.add('house', { loop: true, volume: 0 });
+                   houseSound.play();
+                   this.tweens.add({
+                       targets: houseSound,
+                       volume: 1, // Augmenter le volume progressivement
+                       duration: 3000, // Durée de l'augmentation (2 secondes)
+                       ease: 'Power2'
+                   });
+               }
+           });
+       }
 
         /*this.input.keyboard.on('keydown-R', () => {
             // Appeler la route /evenement directement
@@ -1781,6 +1910,7 @@ class HouseScene extends Phaser.Scene {
                 .catch(err => console.error('Erreur lors du déclenchement d\'un événement aléatoire :', err));
         });*/
         
+        this.sound.volume = 0.5;
 
         this.input.keyboard.on('keydown', async (event) => {
             if (!this.isGeneratingText && ['A', 'B', 'C'].includes(event.key.toUpperCase())) {
@@ -2314,6 +2444,9 @@ class HouseScene extends Phaser.Scene {
                 this.isScenarioInterrupted = false;
                 this.events.emit('scenarioResumed');
 
+                // Déclencher l'événement aléatoire ici
+                this.triggerRandomEvent();
+
                 this.fetchGeneratedText("recommence la partie")
                     .then((texteGenere) => {
                         // Afficher le texte généré dans le panneau de dialogue
@@ -2387,11 +2520,48 @@ class HouseScene extends Phaser.Scene {
                 pistolet.on('pointerdown', () => {
                     this.ramasserObjet('Pistolet', pistolet);
                 });
+
+                // Initialiser le cycle de changement d'image
+                this.startBackgroundCycle(houseImage);
             });
         });
     }
+
+    // Démarrer le cycle de changement d'image
+    startBackgroundCycle(houseImage) {
+        // Stocker la référence de houseImage si nécessaire
+        this.houseImage = houseImage;
+
+        // Initialiser l'index de l'image courante
+        this.currentBackgroundIndex = this.backgroundImages.indexOf(houseImage.texture.key);
+        if (this.currentBackgroundIndex === -1) {
+            this.currentBackgroundIndex = 0;
+            this.houseImage.setTexture(this.backgroundImages[this.currentBackgroundIndex]);
+        }
+
+        // Créer un événement temporel qui se répète toutes les 2 minutes (120000 ms)
+        this.backgroundChangeEvent = this.time.addEvent({
+            delay: 120000, // 2 minutes en millisecondes
+            callback: this.changeBackgroundImage,
+            callbackScope: this,
+            loop: true
+        });
+    }
+
+    // Arrêter le cycle de changement d'image (si nécessaire)
+    stopBackgroundCycle() {
+        if (this.backgroundChangeEvent) {
+            this.backgroundChangeEvent.remove(false);
+            this.backgroundChangeEvent = null;
+        }
+    }
+
+    shutdown() {
+        this.stopBackgroundCycle();
+        // Autres nettoyages si nécessaire
+    }
     
-    initDialoguesEtUI(houseImage) {
+    initDialoguesEtUI() {
         this.dialoguesHouse = [
             "C'est ici... la maison que j'ai héritée.",
             "Elle semble renfermer de nombreux mystères.",
