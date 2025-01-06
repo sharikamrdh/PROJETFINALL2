@@ -46,6 +46,7 @@ Le jeu commence avec le personnage principal qui se réveille dans un hôpital p
 6) Cliquez sur l'url du [serveur local](http://127.0.0.1:5173)
 7) Commencer à jouer le jeu!
    ![Texte alternatif](./assets/1.jpg)
+   ![Texte alternatif](./assets/6.jpg)
 
 
 
